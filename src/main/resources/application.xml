@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 简单类型的属性赋值(String特殊) -->
+
+	<!-- 通过property标签(setter方式)装配属性 -->
+	<bean id="car" class="com.ultra.spring.bean.Car">
+		<property name="name">
+			<!-- 特殊字符使用<![CDATA[]]> -->
+			<value><![CDATA[<audi>]]>
+			</value>
+		</property>
+		<property name="price" value="300000" />
+		<property name="maxSpeed" value="250" />
+	</bean>
+
+	<!-- 通过constructor-arg标签(构造函数方式)装配属性 -->
+	<bean id="car2" class="com.ultra.spring.bean.Car">
+		<!--只有value属性时:按构造函数参数的个数匹配(多个符合时优先匹配①类型原则String,其它类型②靠前原则) -->
+		<constructor-arg value="Baoma2"></constructor-arg>
+		<constructor-arg value="250"></constructor-arg>
+	</bean>
+
+	<bean id="car3" class="com.ultra.spring.bean.Car">
+		<!--测试 -->
+		<constructor-arg value="Baoma3"></constructor-arg>
+		<constructor-arg value="good"></constructor-arg>
+	</bean>
+
+	<bean id="car4" class="com.ultra.spring.bean.Car">
+		<!-- 按参数的个数匹配构造函数,按名称赋值 -->
+		<constructor-arg name="name" value="Baoma4"></constructor-arg>
+		<constructor-arg name="price" value="250000"></constructor-arg>
+	</bean>
+
+	<bean id="car5" class="com.ultra.spring.bean.Car">
+		<!-- 按参数的个数匹配构造函数,按类型赋值.注意int和Integer不会自动转换. -->
+		<constructor-arg value="Baoma5" type="java.lang.String"></constructor-arg>
+		<constructor-arg value="270" type="int"></constructor-arg>
+		<constructor-arg value="270000" type="double"></constructor-arg>
+	</bean>
+
+	<bean id="car6" class="com.ultra.spring.bean.Car">
+		<!-- 按参数的个数匹配构造函数,按索引赋值 -->
+		<constructor-arg value="Baoma6" index="0"></constructor-arg>
+		<constructor-arg value="250000" index="2"></constructor-arg>
+		<constructor-arg value="260" index="1"></constructor-arg>
+	</bean>
+
+	<!-- 对象类型的属性赋值 -->
+	<!-- property标签使用引用方式(ref)给对象类型的属性赋值 -->
+	<bean id="person" class="com.ultra.spring.bean.Person">
+		<property name="name" value="Tom"></property>
+		<property name="car" ref="car6"></property>
+	</bean>
+
+	<!-- 使用内部bean的方式给对象类型的属性赋值 -->
+	<bean id="person2" class="com.ultra.spring.bean.Person">
+		<property name="name" value="Tom"></property>
+		<property name="car">
+			<!-- 外部不能引用 -->
+			<bean class="com.ultra.spring.bean.Car">
+				<property name="name" value="Baoma7"></property>
+				<property name="desc" value="well"></property>
+				<property name="maxSpeed" value="280"></property>
+				<property name="price" value="600000"></property>
+			</bean>
+		</property>
+	</bean>
+	<!-- constructor-arg标签使用引用方式(ref)给对象类型的属性赋值 -->
+	<bean id="person3" class="com.ultra.spring.bean.Person">
+		<constructor-arg name="name" value="Jerry"></constructor-arg>
+		<constructor-arg name="car" ref="car6"></constructor-arg>
+	</bean>
+
+	<!-- 使用内部bean的方式给对象类型的属性赋值 -->
+	<bean id="person4" class="com.ultra.spring.bean.Person">
+		<constructor-arg name="name" value="Jerry"></constructor-arg>
+		<constructor-arg name="car">
+			<bean class="com.ultra.spring.bean.Car">
+				<property name="name" value="Baoma7"></property>
+				<!-- 属性设置为null,使用null标签<null/>,<null></null> -->
+				<property name="desc">
+					<null></null>
+				</property>
+				<property name="maxSpeed" value="280"></property>
+				<property name="price" value="300000"></property>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<!-- 通过bean标签p:属性给对象属性赋值(需要导入p的标签库,spring的bean的.xml的配置文件Namespaces视图勾选p) -->
+	<bean id="person5" class="com.ultra.spring.bean.Person" p:name="Carry"
+		p:car-ref="car6"></bean>
+
+	<!-- 级联属性赋值(了解) -->
+	<bean id="person6" class="com.ultra.spring.bean.Person">
+		<property name="name" value="Jordon"></property>
+		<property name="car" ref="car6"></property>
+		<!-- 级联属性 -->
+		<property name="car.desc" value="well"></property>
+	</bean>
+
+	<!-- list类型属性赋值 -->
+	<!-- 通过property标签给list类型的属性赋值 -->
+	<bean id="person7" class="com.ultra.spring.bean.Person">
+		<property name="name" value="Mark"></property>
+		<property name="car">
+			<null />
+		</property>
+		<property name="cars">
+			<list>
+				<ref bean="car" />
+				<ref bean="car2" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 通过constructor-arg标签给list类型的属性赋值 -->
+	<bean id="person8" class="com.ultra.spring.bean.Person">
+		<constructor-arg name="name" value="Jack"></constructor-arg>
+		<constructor-arg name="car">
+			<null />
+		</constructor-arg>
+		<constructor-arg name="cars">
+			<list>
+				<ref bean="car3" />
+				<ref bean="car4" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 声明集合类型的 bean -->
+	<util:list id="cars">
+		<ref bean="car5" />
+		<ref bean="car6" />
+	</util:list>
+	<!-- 测试util:list标签定义的集合 -->
+	<bean id="person9" class="com.ultra.spring.bean.Person">
+		<constructor-arg name="name" value="Jack"></constructor-arg>
+		<constructor-arg name="car">
+			<null />
+		</constructor-arg>
+		<!-- 引用外部声明的 list -->
+		<constructor-arg name="cars" ref="cars">
+		</constructor-arg>
+	</bean>
+
+	<!-- abstract:抽象bean,为true时不能创建该bean的实例 -->
+	<bean id="carModel" class="com.ultra.spring.bean.Car" p:name="Baoma"
+		p:desc="good" abstract="true"></bean>
+	<!-- parent:继承父bean. -->
+	<bean id="car7" parent="carModel"></bean>
+	<!-- parent:继承父bean.可以覆盖父类的属性 -->
+	<bean id="car8" parent="carModel" p:desc="bad"></bean>
+
+	<!-- autowire:自动装配对象或者集合属性. byName:根据setter的属性赋值(所有的对象(除String)和集合属性,手工赋值的对象不生效,这里的p:car-ref="car8"), 
+		bytype:根据属性的类型赋值,有多个时会抛异常 -->
+	<bean id="person10" class="com.ultra.spring.bean.Person" p:name="Curry"
+		p:car-ref="car8" autowire="byName"></bean>
+
+	<!-- scope:singleton:单例(默认)(加载配置文件时创建对象),prototype:非单例(获取对象时创建对象) -->
+	<bean id="car9" class="com.ultra.spring.bean.Car" scope="prototype"
+		p:name="Baoma9"></bean>
+
+	<!-- 引用外部配置文件参数:spring2.5之前加载配置文件的方式 -->
+	<!-- <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+		<property name="location" value="classpath:car.properties"></property> </bean> -->
+
+	<!-- 引用外部配置文件参数,需要先手动加载配置文件(classpath:类路径下 ) -->
+	<context:property-placeholder location="classpath:car.properties" />
+
+	<!-- 引用外部配置文件参数 -->
+	<bean id="car10" class="com.ultra.spring.bean.Car">
+		<property name="name" value="${name}"></property>
+	</bean>
+
+	<!-- depends-on:依赖,必须初始化依赖对象后才能被初始化(依赖不存在的对象,会抛异常),和配置顺序无关 -->
+	<bean id="person11" class="com.ultra.spring.bean.Person" p:name="James"
+		depends-on="car">
+	</bean>
+
+</beans>

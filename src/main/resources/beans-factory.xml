@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 通过工厂方法的方式来配置 bean -->
+	<!-- 1. 通过静态工厂方法获取实例(了解) -->
+	<!-- class: 中指定静态工厂方法的全类名, factory-method: 指定静态工厂方法的方法名 -->
+	<bean id="car" class="com.ultra.spring.factory.StaticFactory"
+		factory-method="getInstance">
+		<!-- 使用property标签设置属性值也会生效,如果配置,最终会覆盖工厂静态方法的参数 -->
+		<!-- <property name="name" value="Audi2"></property> <property name="price" 
+			value="200000f"></property> -->
+		<!-- 可以通过constructor-arg标签给factory-method传参数 -->
+		<constructor-arg value="Audi"></constructor-arg>
+		<constructor-arg value="400000f"></constructor-arg>
+	</bean>
+
+	<!-- ②. 用实例工厂方法来创建 bean 实例 -->
+	<bean id="instanceFactory" class="com.ultra.spring.factory.InstanceFactory">
+		<!-- 可以配置InstanceFactory的参数 -->
+	</bean>
+	<!-- factory-bean 指向工厂 bean, factory-method 指定工厂方法(了解) -->
+	<bean id="car2" factory-bean="instanceFactory" factory-method="getInstance">
+		<!-- 可以通过constructor-arg标签给factory-method传参数 -->
+		<!-- 使用property标签设置属性值也会生效,如果配置,最终会覆盖工厂方法的参数 -->
+		<constructor-arg value="BMW"></constructor-arg>
+		<constructor-arg value="500000f"></constructor-arg>
+	</bean>
+
+
+</beans>

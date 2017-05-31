@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- init-method:创建对象,设置属性后,调用的初始化方法.destroy-method:关闭IOC容器前调用的销毁方法 -->
+	<bean id="car" class="com.ultra.spring.cycle.Car" init-method="init"
+		destroy-method="destory" p:name="audi"></bean>
+
+	<!-- 在bean对象的初始化方法之前和之后调用 -->
+	<bean class="com.ultra.spring.cycle.MyBeanPostProcessor">
+		<property name="prefix" value="X6_"></property>
+	</bean>
+</beans>

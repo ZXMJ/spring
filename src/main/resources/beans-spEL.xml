@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!-- spEL使用#{},可以引用其他对象,其他对象的属性,调用方法,算数运算符,加号可以连接字符串, 比较运算符(>,<,==,<=,>=,lt,gt,le,ge,eq), 
+		逻辑运算符(and,or,not,!),三目运算符(?:),正则表达式(使用matches关键字),调用静态方法或者属性-->
+	<bean id="car" class="com.ultra.spring.spEL.Car">
+		<!-- 使用spEL赋值一般的字符串 -->
+		<property name="name" value="#{'audi'}"></property>
+		<!-- 使用spEL赋值使用科学计数法 -->
+		<property name="price" value="#{5e6}"></property>
+		<!-- 使用spEL赋值使用静态属性(方法) -->
+		<property name="perimeter" value="#{T(java.lang.Math).PI*80}"></property>
+	</bean>
+
+	<bean id="address" class="com.ultra.spring.spEL.Address">
+		<property name="city" value="#{'BeiJing'}"></property>
+	</bean>
+
+	<bean id="person" class="com.ultra.spring.spEL.Person">
+		<property name="name" value="#{'Tom'}"></property>
+		<!-- 使用spEL赋值引用其他对象的属性,并调用方法 -->
+		<property name="city" value="#{address.city.toUpperCase()}"></property>
+		<!-- 使用spEL赋值使用运算符 -->
+		<property name="level" value="#{car.price>300000?'jinling':'bailing'}"></property>
+	</bean>
+</beans>

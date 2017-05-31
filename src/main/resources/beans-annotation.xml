@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<!-- 扫描该包下所有带有注解的类 -->
+	<context:component-scan base-package="com.ultra.spring.annotation"></context:component-scan>
+
+	<!-- 只扫描该包下特定注解的类,需要配合 use-default-filters="false"使用 -->
+	<!-- <context:component-scan base-package="com.ultra.spring.annotation" 
+		use-default-filters="false"> <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" 
+		/> <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" 
+		/> </context:component-scan> -->
+	<!-- 不扫描该包下特定注解的类,注意:如果其他bean通过注解引用了不被扫描的bean,则那个bean也不能创建成功 -->
+	<!-- <context:component-scan base-package="com.ultra.spring.annotation">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Repository" />
+	</context:component-scan> -->
+</beans>

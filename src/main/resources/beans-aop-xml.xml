@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 注册普通bean -->
+	<bean id="calculatorImpl" class="com.ultra.spring.aop.xml.CalculatorImpl"></bean>
+
+	<!-- 注册切面日志bean -->
+	<bean id="loggingAspect" class="com.ultra.spring.aop.xml.LoggingAspect"></bean>
+	<!-- 注册切面验证bean -->
+	<bean id="validationAspect" class="com.ultra.spring.aop.xml.ValidationAspect"></bean>
+
+	<aop:config>
+		<aop:pointcut expression="execution(* com.ultra.spring.aop.xml.*.*(..))"
+			id="calculatorPointCut" />
+		<aop:aspect ref="loggingAspect" order="2">
+			<aop:before method="before" pointcut-ref="calculatorPointCut" />
+			<aop:after method="after" pointcut-ref="calculatorPointCut" />
+			<aop:after-returning method="afterReturning"
+				returning="result" pointcut-ref="calculatorPointCut" />
+			<aop:after-throwing method="afterThrowing"
+				throwing="ex" pointcut-ref="calculatorPointCut" />
+			<aop:around method="around" pointcut-ref="calculatorPointCut" />
+		</aop:aspect>
+	</aop:config>
+
+	<aop:config>
+		<aop:pointcut expression="execution(* com.ultra.spring.aop.xml.*.*(..))"
+			id="calculatorPointCut" />
+		<aop:aspect ref="validationAspect" order="1">
+			<aop:before method="validation" pointcut-ref="calculatorPointCut" />
+		</aop:aspect>
+	</aop:config>
+</beans>
